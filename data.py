@@ -64,15 +64,23 @@ class Member():
         self.key =  random.randint(1,4294967295)
 
     def addMemberToDictionary(self):
-        return arrayData = [self.id,self.name,self.firstname,self.datetime,self.key]
+        return [self.id,self.name,self.firstname,self.datetime,self.key]
 
     def getKey(self):
-            return self.key
+        return self.key
     def getName(self):
-            return self.name
+        return self.name
     def getForName(self)
-            return self.firstname
+        return self.firstname
     def getlastSeen(self)
         return self.datetime
     def getId(self)
         return self.id
+
+
+
+
+
+if __name__ == "__main__": 
+    print("testprogram")
+    do stuff with your class
