@@ -18,28 +18,30 @@ class Gui():
         self.resultLabel = Label(self.g, font=("Arial", 18), text="Person: ")
         self.resultLabel.grid(row=1, columnspan=2)
 
-        self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 16), text="Create entry: ")
+        self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 16), text="Write tag: ")
         self.createAreaTitle.grid(row=2, columnspan=2)
 
-        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Name: ")
-        self.createAreaTitle.grid(row=3, column=0)
+        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Filter Name: ")
+        self.createAreaTitle.grid(row=3, column=0, sticky=E)
         self.nameInput = Entry(self.g,  width=20)
-        self.nameInput.grid(row=3, column=1)
+        self.nameInput.grid(row=3, column=1, sticky=W)
         self.nameInput.bind("<Key>", self.updateList)
 
-        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Vorname: ")
-        self.createAreaTitle.grid(row=4, column=0)
+        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Filter Vorname: ")
+        self.createAreaTitle.grid(row=4, column=0, sticky=E)
         self.forenameInput = Entry(self.g, width=20)
         self.forenameInput.bind("<Key>", self.updateList)
-        self.forenameInput.grid(row=4, column=1)
+        self.forenameInput.grid(row=4, column=1, sticky=W)
 
-        self.dataList = Listbox(self.g, width=60)
+        self.dataList = Listbox(self.g, width=80)
 
         self.updateList(None)
-        self.dataList.grid(row=5, columnspan=2)
+        self.dataList.grid(row=5, columnspan=2, padx=20)
 
-        self.addBtn = Button(self.g, text="Tag registrieren",  command=self.addBtnAction)
-        self.addBtn.grid(row=6, columnspan=2)
+        self.addBtn = Button(self.g, text="Tag schreiben",  command=lambda : self.addBtnAck.configure(state="normal"))
+        self.addBtn.grid(row=6, column=0, sticky=E)
+        self.addBtnAck = Button(self.g, text="Bestätigen",  command=self.addBtnAction, state="disabled")
+        self.addBtnAck.grid(row=6, column=1, sticky=W)
 
     def start(self):
         self.g.mainloop()
@@ -76,6 +78,8 @@ class Gui():
         memberID = self.dataList.get(ACTIVE).split(":")[0]
         self.members.addMemberKey(memberID, self.members.generateMemberKey())
         self.updateList(None)
+        self.addBtnAck.configure(state="disabled")
+
 
     def updateList(self, eve):
         self.dataList.delete(0,END)
@@ -98,6 +102,8 @@ def changeStuff():
     gui.showResult("USQvwllXLIIb3UCD")
     time.sleep(1)
     gui.showResult("sAiTrBk679pnrwK1")
+    time.sleep(3)
+    gui.g.quit()
 
 
 
