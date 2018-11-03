@@ -1,86 +1,80 @@
+#!/usr/bin/python3
 
 import datetime
-from dateutil.parser import parse
-import random
+import random, string
+
 class Members():
-    self.fileObject
-    self.dataArray
-    self.dataDictionary = {}
-
-    def __init__(self):
-        #read file and store to internal mem
-        self.loadDataFromFile(pathAndFileName)
-
+    def __init__(self, path):
+        self.members = []
+        self.path = path
+        self.load()
 
     def proofMember(self,userkey):
-        #should return name, forename, lastseen
-        # as tuple
-        #empty tuple if user is not in list
-        if(self.dataDictionary.has_key(userkey))
-        return dataDictionary[userkey]
-        else
-        return{}
-
-    def addMember(self, id, name, forname):
-        this.generateUserKey(id,name,forname)
-        this.persist()
-        #add to internal
-        #persist
+        for member in self.members:
+            if member.memberkey == userkey:
+                member.updateLastSeen()
+                self.persist()
+                return member
+        return None
 
 
-    def generateUserKey(self,id,name, forename):
-        mMember = Member.__init__(id,name,forname)
-        sKey = mMember.getKey()
-        dataDictionary[key] = mMember.addMemberToDictionary()
-        #Generate random Key, add Data given from GUI, save into file...?... Profit
+    def addMemberKey(self, member, key):
+        for m in self.members:
+            if m==member:
+                m.memberkey = key
+                m.updateLastSeen()
+        self.persist()
 
+    def getMembersByName(self, name, forename):
+        filteredMembers = self.members
+        if len(name)>0:
+            filteredMembers = filter(lambda e: e.name.startswith(name), filteredMembers)
+        if len(forename)>0:
+            filteredMembers = filter(lambda e: e.forename.startswith(forename), filteredMembers)
+        return filteredMembers 
+
+
+    def generateMemberKey(self):
+        return "".join(random.choice(string.ascii_letters+string.digits) for i in range(16))
 
     def persist(self):
-        #save internal storage
-        #should be invoked by addmember
-        self.fileObject.open()
-            with iIndex in self.dataDictionary
-            self.fileObject.write(self.dataDictionary.values())
+        f = open(self.path, "w")
+        f.write("id,name,forname,birthday,lastseen,memberkey\n")
+        f.writelines([member.getCSVLine()+"\n" for member in self.members])
+        f.close()
 
-        self.fileObject.open()
-
-    def loadDataFromFile(self,pathAndFileName):
-        #Load data from File the file should be in the same directory
-        with open(pathAndFileName,"r+") as fileObject
-        dataArray = fileObject.readlines()
-         for iIndex in dataArray
-            dataLine = dataArray[iIndex]
-            key = dataLine[5]
-            value = dataLine
-            dataDictionary[key] = value
+    def load(self):
+        with open(self.path) as f:
+            dataArray = f.readlines()
+            for dataLine in dataArray[1:]:
+                dataLine=dataLine.strip()
+                member = Member(dataLine.split(","))
+                self.members.append(member)
 
 
 class Member():
-    def __init__(self, id, sMemberName,sMemberFirstName):
-        self.id = id
-        self.name = sMemberName
-        self.firstname = sMemberFirstName
-        self.datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.key =  random.randint(1,4294967295)
+    def __init__(self, memberentry):
+        self.ID = memberentry[0]
+        self.name = memberentry[1]
+        self.forename = memberentry[2]
+        self.birthday = memberentry[3]
+        self.lastseen = memberentry[4]
+        self.memberkey = memberentry[5]
 
-    def addMemberToDictionary(self):
-        return [self.id,self.name,self.firstname,self.datetime,self.key]
+    def updateLastSeen(self):
+        self.lastseen = str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
-    def getKey(self):
-        return self.key
-    def getName(self):
-        return self.name
-    def getForName(self)
-        return self.firstname
-    def getlastSeen(self)
-        return self.datetime
-    def getId(self)
-        return self.id
+    def __str__(self):
+        return self.getCSVLine()
 
 
+    def getCSVLine(self):
+        csv = ""
+        csv += str(self.ID) + ","
+        csv += str(self.name) + ","
+        csv += str(self.forename) + ","
+        csv += str(self.birthday) + ","
+        csv += str(self.lastseen) + ","
+        csv += str(self.memberkey)
+        return csv
 
-
-
-if __name__ == "__main__": 
-    print("testprogram")
-    do stuff with your class

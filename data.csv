@@ -1,2 +1,4 @@
-id,name,forname,timestamp,memberkey
-1337,simpson,homer j,2042-05-23-13-37-00,aaaaaaaaaaaaaaaaaaaaaaa
+id,name,forname,birthday,lastseen,memberkey
+1337,simpson,homer j,1990-01-01,2018-11-03 03:13:51,asdf
+1338,simpson,marge,1990-01-01,2042-04-13 13:37:00,bbbbbbbbbbbbbbbb
+1339,simpson,bart,1990-01-01,2018-11-03 03:14:33,was me
