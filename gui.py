@@ -34,14 +34,14 @@ class Gui():
         self.forenameInput.grid(row=4, column=1, sticky=W)
 
         self.dataList = Listbox(self.g, width=80)
-        self.dataList.bind("<Button-1>", lambda : self.addBtn.configure(state="normal"))
+        self.dataList.bind("<Button-1>", lambda e : self.addBtn.configure(state="normal"))
 
         self.updateList(None)
         self.dataList.grid(row=5, columnspan=2, padx=20)
 
         self.addBtn = Button(self.g, text="Tag schreiben",  command=lambda : self.addBtnAck.configure(state="normal"), state="disabled")
         self.addBtn.grid(row=6, column=0, sticky=E)
-        self.addBtnAck = Button(self.g, text="Bestätigen",  command=self.addBtnAction, state="disabled")
+        self.addBtnAck = Button(self.g, bg="red", text="Bestätigen",  command=self.addBtnAction, state="disabled")
         self.addBtnAck.grid(row=6, column=1, sticky=W)
 
     def start(self):
@@ -79,6 +79,7 @@ class Gui():
         memberID = self.dataList.get(ACTIVE).split(":")[0]
         self.members.addMemberKey(memberID, self.members.generateMemberKey())
         self.updateList(None)
+        self.addBtn.configure(state="disabled")
         self.addBtnAck.configure(state="disabled")
 
 
