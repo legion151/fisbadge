@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import datetime
-import random, string
+import random, string, copy
 
 class Members():
     def __init__(self, path):
@@ -12,9 +12,10 @@ class Members():
     def proofMember(self,userkey):
         for member in self.members:
             if member.memberkey == userkey:
+                memberCpy = copy.copy(member)
                 member.updateLastSeen()
                 self.persist()
-                return member
+                return memberCpy
         return None
 
 

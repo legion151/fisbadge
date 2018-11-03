@@ -2,6 +2,7 @@
 
 import data
 import time
+import datetime
 from tkinter import *
 from threading import Thread
 
@@ -11,7 +12,7 @@ class Gui():
         self.members = data.Members("data.csv")
         self.g = Tk()
         self.g.title = "Fis Badge"
-        self.g.minsize(width=400,height=400)
+        self.g.minsize(width=600,height=600)
         self.title = Label(self.g, pady=20, padx=20, font=("Arial", 24), text="FiS - RFID Badge Controller", anchor=CENTER, justify=CENTER)
         self.title.pack()
         self.resultLabel = Label(self.g, font=("Arial", 18), text="Person: ", anchor=CENTER)
@@ -49,8 +50,28 @@ class Gui():
             self.resultLabel.configure(text="Person: not found")
             self.resultLabel.configure(bg="red")
         else:
-            self.resultLabel.configure(text="Person: " + member.name + ", " + member.forename + "  lastseen:" + member.lastseen)
-            self.resultLabel.configure(bg="green")
+            lastSeenStr = self.lastSeenString(member.lastseen)
+            self.resultLabel.configure(text="Person: " + member.name + ", " + member.forename + "  lastseen: " + lastSeenStr + " ago")
+
+            if "days" in lastSeenStr:
+                self.resultLabel.configure(bg="#00ff00")
+            else:
+                self.resultLabel.configure(bg="yellow")
+
+    def lastSeenString(self, datestring):
+        d_last = datetime.datetime.strptime(datestring.strip(), "%Y-%m-%d %H:%M:%S")
+        d_now = datetime.datetime.now()
+        dif = d_now-d_last
+
+        if(dif.days>0):
+            return str(dif.days) + " days"
+        secs = dif.seconds
+        if(secs // 3600)>0:
+            return str(secs//3600) + " hours"
+        if(secs //60)>0:
+            return str(secs//60) + " minutes"
+        return str(secs) + " secs"
+
 
 
     def addBtnAction(self):
@@ -76,12 +97,13 @@ class Gui():
 
 
 def changeStuff():
-    time.sleep(2)
+    time.sleep(1)
     global gui
     gui.showResult("")
-    time.sleep(5)
+    time.sleep(1)
     gui.showResult("USQvwllXLIIb3UCD")
-
+    time.sleep(1)
+    gui.showResult("sAiTrBk679pnrwK1")
 
 
 
