@@ -18,15 +18,16 @@ class Members():
         return None
 
 
-    def addMemberKey(self, member, key):
+    def addMemberKey(self, ID, key):
         for m in self.members:
-            if m==member:
+            if m.ID==ID:
                 m.memberkey = key
                 m.updateLastSeen()
         self.persist()
 
     def getMembersByName(self, name, forename):
         filteredMembers = self.members
+        filteredMembers = filter(lambda e: len(e.memberkey)==0, filteredMembers)
         if len(name)>0:
             filteredMembers = filter(lambda e: e.name.startswith(name), filteredMembers)
         if len(forename)>0:
