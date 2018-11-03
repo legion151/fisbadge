@@ -13,33 +13,33 @@ class Gui():
         self.g = Tk()
         self.g.title = "Fis Badge"
         self.g.minsize(width=600,height=600)
-        self.title = Label(self.g, pady=20, padx=20, font=("Arial", 24), text="FiS - RFID Badge Controller", anchor=CENTER, justify=CENTER)
-        self.title.pack()
-        self.resultLabel = Label(self.g, font=("Arial", 18), text="Person: ", anchor=CENTER)
-        self.resultLabel.pack()
+        self.title = Label(self.g, pady=20, padx=20, font=("Arial", 24), text="FiS - RFID Badge Controller")
+        self.title.grid(row=0, columnspan=2)
+        self.resultLabel = Label(self.g, font=("Arial", 18), text="Person: ")
+        self.resultLabel.grid(row=1, columnspan=2)
 
-        self.createAreaTitle= Label(self.g, pady=30, font=("Arial", 16), text="Create entry: ", anchor=W)
-        self.createAreaTitle.pack()
+        self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 16), text="Create entry: ")
+        self.createAreaTitle.grid(row=2, columnspan=2)
 
-        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Name: ", anchor=W)
-        self.createAreaTitle.pack()
+        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Name: ")
+        self.createAreaTitle.grid(row=3, column=0)
         self.nameInput = Entry(self.g,  width=20)
-        self.nameInput.pack()
+        self.nameInput.grid(row=3, column=1)
         self.nameInput.bind("<Key>", self.updateList)
 
-        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Vorname: ", anchor=W)
-        self.createAreaTitle.pack()
+        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Vorname: ")
+        self.createAreaTitle.grid(row=4, column=0)
         self.forenameInput = Entry(self.g, width=20)
         self.forenameInput.bind("<Key>", self.updateList)
-        self.forenameInput.pack()
+        self.forenameInput.grid(row=4, column=1)
 
         self.dataList = Listbox(self.g, width=60)
 
         self.updateList(None)
-        self.dataList.pack()
+        self.dataList.grid(row=5, columnspan=2)
 
         self.addBtn = Button(self.g, text="Tag registrieren",  command=self.addBtnAction)
-        self.addBtn.pack()
+        self.addBtn.grid(row=6, columnspan=2)
 
     def start(self):
         self.g.mainloop()
@@ -72,8 +72,6 @@ class Gui():
             return str(secs//60) + " minutes"
         return str(secs) + " secs"
 
-
-
     def addBtnAction(self):
         memberID = self.dataList.get(ACTIVE).split(":")[0]
         self.members.addMemberKey(memberID, self.members.generateMemberKey())
@@ -89,10 +87,6 @@ class Gui():
 
         for member in filteredMembers:
             self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "   geboren " + member.birthday)
-
-
-
-
 
 
 
