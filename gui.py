@@ -13,15 +13,15 @@ class Gui():
         self.g = Tk()
         self.g.title = "Fis Badge"
         self.g.minsize(width=600,height=600)
-        self.title = Label(self.g, pady=20, padx=20, font=("Arial", 24), text="FiS - RFID Badge Controller")
+        self.title = Label(self.g, pady=20, padx=20, font=("Arial", 24 ), text="FiS - RFID Badge Controller")
         self.title.grid(row=0, columnspan=2)
-        self.resultLabel = Label(self.g, font=("Arial", 18), text="Person: ")
+        self.resultLabel = Label(self.g, pady=20, font=("Arial", 18), text="Person: ")
         self.resultLabel.grid(row=1, columnspan=2)
 
         self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 16), text="Write tag: ")
         self.createAreaTitle.grid(row=2, columnspan=2)
 
-        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Filter Name: ")
+        self.createAreaTitle= Label(self.g, pady=0, font=("Arial", 16), text="Filter Name: ")
         self.createAreaTitle.grid(row=3, column=0, sticky=E)
         self.nameInput = Entry(self.g,  width=20)
         self.nameInput.grid(row=3, column=1, sticky=W)
@@ -50,11 +50,11 @@ class Gui():
     def showResult(self, memberKey):
         member = self.members.proofMember(memberKey)
         if not member:
-            self.resultLabel.configure(text="Person: not found")
+            self.resultLabel.configure(text=" Person: not found ")
             self.resultLabel.configure(bg="red")
         else:
             lastSeenStr = self.lastSeenString(member.lastseen)
-            self.resultLabel.configure(text="Person: " + member.name + ", " + member.forename + "  lastseen: " + lastSeenStr + " ago")
+            self.resultLabel.configure(text=" Person: " + member.name + ", " + member.forename + "  lastseen: " + lastSeenStr + " ago ")
 
             if "days" in lastSeenStr:
                 self.resultLabel.configure(bg="#00ff00")
@@ -104,8 +104,6 @@ def changeStuff():
     gui.showResult("USQvwllXLIIb3UCD")
     time.sleep(1)
     gui.showResult("sAiTrBk679pnrwK1")
-    time.sleep(3)
-    gui.g.quit()
 
 
 
