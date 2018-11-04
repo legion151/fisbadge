@@ -2,6 +2,7 @@
 
 import datetime
 import random, string, copy
+import requests
 
 class Members():
     def __init__(self, path):
@@ -41,17 +42,33 @@ class Members():
 
     def persist(self):
         f = open(self.path, "w")
-        f.write("id,name,forname,membertype,birthday,memberkey\n")
+        f.write("id,name,forename,membertype,birthday,memberkey\n")
         f.writelines([member.getCSVLine()+"\n" for member in self.members])
         f.close()
 
     def load(self):
+        self.members = []
         with open(self.path) as f:
             dataArray = f.readlines()
             for dataLine in dataArray[1:]:
                 dataLine=dataLine.strip()
                 member = Member(dataLine.split(","))
                 self.members.append(member)
+
+    def pullData(self, usr, pwd):
+        url = "https://www.fis-ev.de/intern/db/getFisBadgeFile.php"
+        data = requests.get(url, auth=(usr, pwd)).content.decode()
+
+        if 'id,name,forename' in data:
+            open(self.path, "w").write(data)
+            self.load()
+            return True
+
+        else:
+            print(data)
+            return False
+
+
 
 
 class Member():

@@ -4,6 +4,8 @@ import data
 import time
 import datetime
 from tkinter import *
+from tkinter import simpledialog
+from tkinter import messagebox 
 from threading import Thread
 
 
@@ -11,38 +13,64 @@ class Gui():
     def __init__(self):
         self.members = data.Members("data.csv")
         self.g = Tk()
-        self.g.title = "Fis Badge"
-        self.g.minsize(width=600,height=600)
+#        self.g.title = "Fis Badge"
+        self.g.minsize(width=800,height=600)
         self.title = Label(self.g, pady=20, padx=20, font=("Arial", 24 ), text="FiS - RFID Badge Controller")
         self.title.grid(row=0, columnspan=2)
         self.resultLabel = Label(self.g, pady=20, font=("Arial", 18), text="Person: ")
         self.resultLabel.grid(row=1, columnspan=2)
 
-        self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 16), text="Write tag: ")
+
+
+        self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 20), text="Server: ")
         self.createAreaTitle.grid(row=2, columnspan=2)
 
+        self.pullBtn = Button(self.g, text="Pull data", command=self.pullData)
+        self.pullBtn.grid(row=3, column=0, sticky=E)
+
+        self.pushBtn = Button(self.g, text="Push data")
+        self.pushBtn.grid(row=3, column=1, sticky=W)
+
+
+        self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 20), text="Write tag: ")
+        self.createAreaTitle.grid(row=4, columnspan=2)
+
         self.createAreaTitle= Label(self.g, pady=0, font=("Arial", 16), text="Filter Name: ")
-        self.createAreaTitle.grid(row=3, column=0, sticky=E)
+        self.createAreaTitle.grid(row=5, column=0, sticky=E)
         self.nameInput = Entry(self.g,  width=20)
-        self.nameInput.grid(row=3, column=1, sticky=W)
+        self.nameInput.grid(row=5, column=1, sticky=W)
         self.nameInput.bind("<Key>", self.updateList)
 
         self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Filter Vorname: ")
-        self.createAreaTitle.grid(row=4, column=0, sticky=E)
+        self.createAreaTitle.grid(row=6, column=0, sticky=E)
         self.forenameInput = Entry(self.g, width=20)
         self.forenameInput.bind("<Key>", self.updateList)
-        self.forenameInput.grid(row=4, column=1, sticky=W)
+        self.forenameInput.grid(row=6, column=1, sticky=W)
 
         self.dataList = Listbox(self.g, width=80)
         self.dataList.bind("<Button-1>", lambda e : self.addBtn.configure(state="normal"))
 
         self.updateList(None)
-        self.dataList.grid(row=5, columnspan=2, padx=20)
+        self.dataList.grid(row=8, columnspan=2, padx=20)
 
         self.addBtn = Button(self.g, text="Tag schreiben",  command=lambda : self.addBtnAck.configure(state="normal"), state="disabled")
-        self.addBtn.grid(row=6, column=0, sticky=E)
+        self.addBtn.grid(row=9, column=0, sticky=E)
         self.addBtnAck = Button(self.g, bg="red", text="Bestätigen",  command=self.addBtnAction, state="disabled")
-        self.addBtnAck.grid(row=6, column=1, sticky=W)
+        self.addBtnAck.grid(row=9, column=1, sticky=W)
+
+    def pullData(self):
+        usr = simpledialog.askstring("Username", "Username")
+        success = False
+        if usr: 
+            pwd = simpledialog.askstring("Password", "Password:")
+            if usr and pwd:
+               success = self.members.pullData(usr, pwd)
+        if success:
+            messagebox.showinfo("Success", "Success", parent=self.g)
+        else:
+            messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
+
+        
 
     def start(self):
         self.g.mainloop()
@@ -50,11 +78,11 @@ class Gui():
     def showResult(self, memberKey):
         member = self.members.proofMember(memberKey)
         if not member:
-            self.resultLabel.configure(text=" Person: not found ")
+            self.resultLabel.configure(text=" ACCESS DENIED ")
             self.resultLabel.configure(bg="red")
         else:
             lastSeenStr = self.lastSeenString(member.lastseen)
-            self.resultLabel.configure(text=" Person: " + member.name + ", " + member.forename + ", mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr)
+            self.resultLabel.configure(text=" " + member.name + ", " + member.forename + "  mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr)
 
             if "not yet" in lastSeenStr:
                 self.resultLabel.configure(bg="#00ff00")
