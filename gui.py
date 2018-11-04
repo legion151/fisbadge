@@ -54,7 +54,7 @@ class Gui():
             self.resultLabel.configure(bg="red")
         else:
             lastSeenStr = self.lastSeenString(member.lastseen)
-            self.resultLabel.configure(text=" Person: " + member.name + ", " + member.forename + "  lastseen: " + lastSeenStr + " ago ")
+            self.resultLabel.configure(text=" Person: " + member.name + ", " + member.forename + ", mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr + " ago ")
 
             if "days" in lastSeenStr:
                 self.resultLabel.configure(bg="#00ff00")
@@ -92,7 +92,7 @@ class Gui():
         filteredMembers = self.members.getMembersByName(name, forename) 
 
         for member in filteredMembers:
-            self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "   geboren " + member.birthday)
+            self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     mitgliedsstatus " + member.membertype + "     geboren " + member.birthday)
 
 
 
