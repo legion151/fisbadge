@@ -53,10 +53,8 @@ class Gui():
         self.updateList(None)
         self.dataList.grid(row=8, columnspan=2, padx=20)
 
-        self.addBtn = Button(self.g, text="Tag schreiben",  command=lambda : self.addBtnAck.configure(state="normal"), state="disabled")
-        self.addBtn.grid(row=9, column=0, sticky=E)
-        self.addBtnAck = Button(self.g, bg="red", text="Bestätigen",  command=self.addBtnAction, state="disabled")
-        self.addBtnAck.grid(row=9, column=1, sticky=W)
+        self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
+        self.addBtn.grid(row=9, columnspan=2)
 
     def pullData(self):
         usr = simpledialog.askstring("Username", "Username")
@@ -106,11 +104,12 @@ class Gui():
         return str(secs) + " secs"
 
     def addBtnAction(self):
+        if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
+            return
         memberID = self.dataList.get(ACTIVE).split(":")[0]
         self.members.addMemberKey(memberID, self.members.generateMemberKey())
         self.updateList(None)
         self.addBtn.configure(state="disabled")
-        self.addBtnAck.configure(state="disabled")
 
 
     def updateList(self, eve):
