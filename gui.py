@@ -57,6 +57,8 @@ class Gui():
         self.addBtn.grid(row=9, columnspan=2)
 
     def pullData(self):
+        if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
+            return
         usr = simpledialog.askstring("Username", "Username")
         success = False
         if usr: 
@@ -69,6 +71,8 @@ class Gui():
             messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
 
     def pushData(self):
+        if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
+            return
         usr = simpledialog.askstring("Username", "Username")
         success = False
         if usr: 
