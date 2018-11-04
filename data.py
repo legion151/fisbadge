@@ -65,8 +65,20 @@ class Members():
             return True
 
         else:
-            print(data)
             return False
+
+    def pushData(self, usr, pwd):
+        url = "https://www.fis-ev.de/intern/db/setFisBadgeData.php"
+        postdata = ""
+        for member in self.members:
+            if member.badgecode:
+                postdata += member.ID +","+ member.badgecode + ";"
+
+        payload = {"data":postdata}
+        r = requests.post(url, auth=(usr, pwd), data=payload).content.decode()
+
+        return 'success' in r
+
 
 
 

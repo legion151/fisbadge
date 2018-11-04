@@ -1,4 +1,4 @@
-id,name,forename,membertype,birthday,memberkey
-1337,simpson,homer j,normal,1990-01-01,USQvwllXLIIb3UCD
-1338,simpson,marge,dartgewitter_u27,1990-01-01,sAiTrBk679pnrwK
-1339,simpson,bart,nichtmitglied,1990-01-01,
+id,name,forename,membertype,birthday,badgecode
+1337,Simpson,Homer J,normal,01.02.1990,pd36Qwyj7s7NQvZt
+1338,Simpson,Bart,normal,01.02.1990,Fd6qKmUIqoccZxzK
+1339,Simpson,Marge,normal,01.02.1990,cXq7jy3Ttmhqfhm8

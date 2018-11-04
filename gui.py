@@ -28,7 +28,7 @@ class Gui():
         self.pullBtn = Button(self.g, text="Pull data", command=self.pullData)
         self.pullBtn.grid(row=3, column=0, sticky=E)
 
-        self.pushBtn = Button(self.g, text="Push data")
+        self.pushBtn = Button(self.g, text="Push data", command=self.pushData)
         self.pushBtn.grid(row=3, column=1, sticky=W)
 
 
@@ -68,6 +68,17 @@ class Gui():
         else:
             messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
 
+    def pushData(self):
+        usr = simpledialog.askstring("Username", "Username")
+        success = False
+        if usr: 
+            pwd = simpledialog.askstring("Password", "Password:")
+            if usr and pwd:
+               success = self.members.pushData(usr, pwd)
+        if success:
+            messagebox.showinfo("Success", "Success", parent=self.g)
+        else:
+            messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
         
 
     def start(self):
@@ -115,9 +126,7 @@ class Gui():
     def updateList(self, eve):
         self.dataList.delete(0,END)
         name = self.nameInput.get()
-        print(name)
         forename = self.forenameInput.get()
-        print(forename)
         filteredMembers = self.members.getMembersByName(name, forename) 
 
         for member in filteredMembers:
