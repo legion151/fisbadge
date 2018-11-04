@@ -73,8 +73,8 @@ class Gui():
     def start(self):
         self.g.mainloop()
 
-    def showResult(self, memberKey):
-        member = self.members.proofMember(memberKey)
+    def showResult(self, badgecode):
+        member = self.members.proofMember(badgecode)
         if not member:
             self.resultLabel.configure(text=" ACCESS DENIED ")
             self.resultLabel.configure(bg="red")
@@ -107,7 +107,7 @@ class Gui():
         if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
             return
         memberID = self.dataList.get(ACTIVE).split(":")[0]
-        self.members.addMemberKey(memberID, self.members.generateMemberKey())
+        self.members.addBadgecode(memberID, self.members.generateBadgecode())
         self.updateList(None)
         self.addBtn.configure(state="disabled")
 

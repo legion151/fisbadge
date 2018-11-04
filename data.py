@@ -12,7 +12,7 @@ class Members():
 
     def proofMember(self,userkey):
         for member in self.members:
-            if len(userkey)>0 and member.memberkey == userkey:
+            if len(userkey)>0 and member.badgecode == userkey:
                 memberCpy = copy.copy(member)
                 member.updateLastSeen()
                 self.persist()
@@ -20,16 +20,16 @@ class Members():
         return None
 
 
-    def addMemberKey(self, ID, key):
+    def addBadgecode(self, ID, badgecode):
         for m in self.members:
             if m.ID==ID:
-                m.memberkey = key
+                m.badgecode = badgecode
                 m.updateLastSeen()
         self.persist()
 
     def getMembersByName(self, name, forename):
         filteredMembers = self.members
-        filteredMembers = filter(lambda e: len(e.memberkey)==0, filteredMembers)
+        filteredMembers = filter(lambda e: len(e.badgecode)==0, filteredMembers)
         if len(name)>0:
             filteredMembers = filter(lambda e: e.name.startswith(name), filteredMembers)
         if len(forename)>0:
@@ -37,12 +37,12 @@ class Members():
         return filteredMembers 
 
 
-    def generateMemberKey(self):
+    def generateBadgecode(self):
         return "".join(random.choice(string.ascii_letters+string.digits) for i in range(16))
 
     def persist(self):
         f = open(self.path, "w")
-        f.write("id,name,forename,membertype,birthday,memberkey\n")
+        f.write("id,name,forename,membertype,birthday,badgecode\n")
         f.writelines([member.getCSVLine()+"\n" for member in self.members])
         f.close()
 
@@ -79,7 +79,7 @@ class Member():
         self.membertype = memberentry[3]
         self.birthday = memberentry[4]
         self.lastseen = "not yet" 
-        self.memberkey = memberentry[5]
+        self.badgecode = memberentry[5]
 
     def updateLastSeen(self):
         self.lastseen = str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -95,6 +95,6 @@ class Member():
         csv += str(self.forename) + ","
         csv += str(self.membertype) + ","
         csv += str(self.birthday) + ","
-        csv += str(self.memberkey)
+        csv += str(self.badgecode)
         return csv
 
