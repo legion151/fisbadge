@@ -39,18 +39,18 @@ class Gui():
         self.createAreaTitle.grid(row=5, column=0, sticky=E)
         self.nameInput = Entry(self.g,  width=20)
         self.nameInput.grid(row=5, column=1, sticky=W)
-        self.nameInput.bind("<Key>", self.updateList)
+        self.nameInput.bind("<Key>", self.updateListName)
 
         self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Filter Vorname: ")
         self.createAreaTitle.grid(row=6, column=0, sticky=E)
         self.forenameInput = Entry(self.g, width=20)
-        self.forenameInput.bind("<Key>", self.updateList)
         self.forenameInput.grid(row=6, column=1, sticky=W)
+        self.forenameInput.bind("<Key>", self.updateListForname)
 
         self.dataList = Listbox(self.g, width=80)
         self.dataList.bind("<Button-1>", lambda e : self.addBtn.configure(state="normal"))
 
-        self.updateList(None)
+        self.updateList()
         self.dataList.grid(row=8, columnspan=2, padx=20)
 
         self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
@@ -67,6 +67,7 @@ class Gui():
                success = self.members.pullData(usr, pwd)
         if success:
             messagebox.showinfo("Success", "Success", parent=self.g)
+            self.updateList()
         else:
             messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
 
@@ -123,18 +124,27 @@ class Gui():
             return
         memberID = self.dataList.get(ACTIVE).split(":")[0]
         self.members.addBadgecode(memberID, self.members.generateBadgecode())
-        self.updateList(None)
+        self.updateList()
         self.addBtn.configure(state="disabled")
 
+    def updateListForname(self, eve):
+        fn = self.forenameInput.get() + str(eve.char)
+        self.updateList(forename=fn)
+    def updateListName(self, eve):
+        n = self.nameInput.get() + str(eve.char)
+        self.updateList(name=n)
 
-    def updateList(self, eve):
+
+    def updateList(self, forename="", name=""):
         self.dataList.delete(0,END)
-        name = self.nameInput.get()
-        forename = self.forenameInput.get()
-        filteredMembers = self.members.getMembersByName(name, forename) 
+        if not name:
+            name = self.nameInput.get()
+        if not forename:
+            forename = self.forenameInput.get()
+        filteredMembers = self.members.getMembersByName(name.strip(), forename.strip()) 
 
         for member in filteredMembers:
-            self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     mitgliedsstatus " + member.membertype + "     geboren " + member.birthday)
+            self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     mitgliedsstatus " + member.membertype + "     geboren " + member.birthday + "    badgecode: " + member.badgecode)
 
 
 

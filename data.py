@@ -27,13 +27,14 @@ class Members():
                 m.updateLastSeen()
         self.persist()
 
-    def getMembersByName(self, name, forename):
+    def getMembersByName(self, name, forename, showRegistered=False):
         filteredMembers = self.members
-        filteredMembers = filter(lambda e: len(e.badgecode)==0, filteredMembers)
+        if not showRegistered:
+            filteredMembers = filter(lambda e: len(e.badgecode)==0, filteredMembers)
         if len(name)>0:
-            filteredMembers = filter(lambda e: e.name.startswith(name), filteredMembers)
+            filteredMembers = filter(lambda e: e.name.lower().startswith(name.lower()), filteredMembers)
         if len(forename)>0:
-            filteredMembers = filter(lambda e: e.forename.startswith(forename), filteredMembers)
+            filteredMembers = filter(lambda e: e.forenamelower().startswith(forename.lower()), filteredMembers)
         return filteredMembers 
 
 
