@@ -11,7 +11,7 @@ class Members():
 
     def proofMember(self,userkey):
         for member in self.members:
-            if member.memberkey == userkey:
+            if len(userkey)>0 and member.memberkey == userkey:
                 memberCpy = copy.copy(member)
                 member.updateLastSeen()
                 self.persist()
