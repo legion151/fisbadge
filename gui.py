@@ -54,25 +54,27 @@ class Gui():
             self.resultLabel.configure(bg="red")
         else:
             lastSeenStr = self.lastSeenString(member.lastseen)
-            self.resultLabel.configure(text=" Person: " + member.name + ", " + member.forename + ", mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr + " ago ")
+            self.resultLabel.configure(text=" Person: " + member.name + ", " + member.forename + ", mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr)
 
-            if "days" in lastSeenStr:
+            if "not yet" in lastSeenStr:
                 self.resultLabel.configure(bg="#00ff00")
             else:
                 self.resultLabel.configure(bg="yellow")
 
     def lastSeenString(self, datestring):
+        if datestring=="not yet": 
+            return datestring
         d_last = datetime.datetime.strptime(datestring.strip(), "%Y-%m-%d %H:%M:%S")
         d_now = datetime.datetime.now()
         dif = d_now-d_last
 
         if(dif.days>0):
-            return str(dif.days) + " days"
+            return str(dif.days) + " days ago"
         secs = dif.seconds
         if(secs // 3600)>0:
-            return str(secs//3600) + " hours"
+            return str(secs//3600) + " hours ago"
         if(secs //60)>0:
-            return str(secs//60) + " minutes"
+            return str(secs//60) + " minutes ago"
         return str(secs) + " secs"
 
     def addBtnAction(self):
@@ -100,10 +102,12 @@ def changeStuff():
     time.sleep(1)
     global gui
     gui.showResult("")
-    time.sleep(1)
-    gui.showResult("USQvwllXLIIb3UCD")
-    time.sleep(1)
-    gui.showResult("sAiTrBk679pnrwK1")
+    time.sleep(3)
+    mks = ["" ,"USQvwllXLIIb3UCD", "USQvwllXLIIb3UCD", "sAiTrBk679pnrwK"]
+    for mk in mks:
+        print("proofing: " + mk)
+        gui.showResult(mk)
+        time.sleep(3)
 
 
 

@@ -41,7 +41,7 @@ class Members():
 
     def persist(self):
         f = open(self.path, "w")
-        f.write("id,name,forname,membertype,birthday,lastseen,memberkey\n")
+        f.write("id,name,forname,membertype,birthday,memberkey\n")
         f.writelines([member.getCSVLine()+"\n" for member in self.members])
         f.close()
 
@@ -61,8 +61,8 @@ class Member():
         self.forename = memberentry[2]
         self.membertype = memberentry[3]
         self.birthday = memberentry[4]
-        self.lastseen = memberentry[5]
-        self.memberkey = memberentry[6]
+        self.lastseen = "not yet" 
+        self.memberkey = memberentry[5]
 
     def updateLastSeen(self):
         self.lastseen = str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -78,7 +78,6 @@ class Member():
         csv += str(self.forename) + ","
         csv += str(self.membertype) + ","
         csv += str(self.birthday) + ","
-        csv += str(self.lastseen) + ","
         csv += str(self.memberkey)
         return csv
 

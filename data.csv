@@ -1,4 +1,4 @@
-id,name,forname,membertype,birthday,lastseen,memberkey
-1337,simpson,homer j,normal,1990-01-01,2018-11-04 11:02:07,
-1338,simpson,marge,dartgewitter_u27,1990-01-01,2018-11-01 05:30:42,
-1339,simpson,bart,nichtmitglied,1990-01-01,2018-11-03 17:42:13,
+id,name,forname,membertype,birthday,memberkey
+1337,simpson,homer j,normal,1990-01-01,USQvwllXLIIb3UCD
+1338,simpson,marge,dartgewitter_u27,1990-01-01,
+1339,simpson,bart,nichtmitglied,1990-01-01,
