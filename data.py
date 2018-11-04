@@ -41,19 +41,21 @@ class Members():
         return "".join(random.choice(string.ascii_letters+string.digits) for i in range(16))
 
     def persist(self):
-        f = open(self.path, "w")
-        f.write("id,name,forename,membertype,birthday,badgecode\n")
-        f.writelines([member.getCSVLine()+"\n" for member in self.members])
-        f.close()
+        with open(self.path, "w") as f:
+            f.write("id,name,forename,membertype,birthday,badgecode\n")
+            f.writelines([member.getCSVLine()+"\n" for member in self.members])
 
     def load(self):
         self.members = []
-        with open(self.path) as f:
-            dataArray = f.readlines()
-            for dataLine in dataArray[1:]:
-                dataLine=dataLine.strip()
-                member = Member(dataLine.split(","))
-                self.members.append(member)
+        try:
+            with open(self.path) as f:
+                dataArray = f.readlines()
+                for dataLine in dataArray[1:]:
+                    dataLine=dataLine.strip()
+                    member = Member(dataLine.split(","))
+                    self.members.append(member)
+        except:
+            pass
 
     def pullData(self, usr, pwd):
         url = "https://www.fis-ev.de/intern/db/getFisBadgeFile.php"
