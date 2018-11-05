@@ -64,6 +64,9 @@ class Gui():
         self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
         self.addBtn.grid(row=9, column=1, sticky=W)
 
+        self.g.grid_columnconfigure(0,weight=1)
+        self.g.grid_columnconfigure(1,weight=1)
+
 
         self.updateList()
 
