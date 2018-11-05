@@ -35,17 +35,19 @@ class Gui():
         self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 20), text="Write tag: ")
         self.createAreaTitle.grid(row=4, columnspan=2)
 
+        self.nameStr = StringVar()
+        self.nameStr.trace("w", self.updateList)
         self.createAreaTitle= Label(self.g, pady=0, font=("Arial", 16), text="Filter Name: ")
         self.createAreaTitle.grid(row=5, column=0, sticky=E)
-        self.nameInput = Entry(self.g,  width=20)
+        self.nameInput = Entry(self.g,  width=20, textvariable=self.nameStr)
         self.nameInput.grid(row=5, column=1, sticky=W)
-        self.nameInput.bind("<Key>", self.updateListName)
 
+        self.forenameStr = StringVar()
+        self.forenameStr.trace("w", self.updateList)
         self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Filter Vorname: ")
         self.createAreaTitle.grid(row=6, column=0, sticky=E)
-        self.forenameInput = Entry(self.g, width=20)
+        self.forenameInput = Entry(self.g, width=20, textvariable=self.forenameStr)
         self.forenameInput.grid(row=6, column=1, sticky=W)
-        self.forenameInput.bind("<Key>", self.updateListForname)
 
         self.dataList = Listbox(self.g, width=80)
         self.dataList.bind("<Button-1>", lambda e : self.addBtn.configure(state="normal"))
@@ -55,16 +57,27 @@ class Gui():
 
         self.showRegistered = BooleanVar()
         self.showRegistered.set(False)
+        self.showRegistered.trace("w", self.updateList)
         self.checkBtn = Checkbutton(self.g, text="Zeige Registrierte", variable=self.showRegistered)
-        self.checkBtn.bind("<Button-1>", lambda e: self.updateList())
         self.checkBtn.grid(row=9, column=0, sticky=E)
 
         self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
         self.addBtn.grid(row=9, column=1, sticky=W)
 
 
-
         self.updateList()
+
+    def updateList(self, *args):
+        self.dataList.delete(0,END)
+
+        name = self.nameStr.get()
+        forename = self.forenameStr.get()
+        filteredMembers = self.members.getMembersByName(name.strip(), forename.strip(), self.showRegistered.get()) 
+
+        for member in filteredMembers:
+            self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     mitgliedsstatus " + member.membertype + "     geboren " + member.birthday + "    badgecode: " + member.badgecode)
+
+
 
     def pullData(self):
         if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
@@ -136,26 +149,6 @@ class Gui():
         self.members.addBadgecode(memberID, self.members.generateBadgecode())
         self.updateList()
         self.addBtn.configure(state="disabled")
-
-    def updateListForname(self, eve):
-        fn = self.forenameInput.get() + str(eve.char)
-        self.updateList(forename=fn)
-    def updateListName(self, eve):
-        n = self.nameInput.get() + str(eve.char)
-        self.updateList(name=n)
-
-
-    def updateList(self, forename="", name=""):
-        self.dataList.delete(0,END)
-        if not name:
-            name = self.nameInput.get()
-        if not forename:
-            forename = self.forenameInput.get()
-        filteredMembers = self.members.getMembersByName(name.strip(), forename.strip(), self.showRegistered.get()) 
-
-        for member in filteredMembers:
-            self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     mitgliedsstatus " + member.membertype + "     geboren " + member.birthday + "    badgecode: " + member.badgecode)
-
 
 
 def changeStuff():
