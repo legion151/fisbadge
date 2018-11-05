@@ -32,9 +32,9 @@ class Members():
         if not showRegistered:
             filteredMembers = filter(lambda e: len(e.badgecode)==0, filteredMembers)
         if len(name)>0:
-            filteredMembers = filter(lambda e: e.name.lower().startswith(name.lower()), filteredMembers)
+            filteredMembers = filter(lambda e: name.lower() in e.name.lower(), filteredMembers)
         if len(forename)>0:
-            filteredMembers = filter(lambda e: e.forenamelower().startswith(forename.lower()), filteredMembers)
+            filteredMembers = filter(lambda e: forename.lower() in e.forename.lower(), filteredMembers)
         return filteredMembers 
 
 
