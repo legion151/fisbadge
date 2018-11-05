@@ -50,11 +50,20 @@ class Gui():
         self.dataList = Listbox(self.g, width=80)
         self.dataList.bind("<Button-1>", lambda e : self.addBtn.configure(state="normal"))
 
-        self.updateList()
         self.dataList.grid(row=8, columnspan=2, padx=20)
 
+
+        self.showRegistered = BooleanVar()
+        self.showRegistered.set(False)
+        self.checkBtn = Checkbutton(self.g, text="Zeige Registrierte", variable=self.showRegistered)
+        self.checkBtn.grid(row=9, column=0, sticky=E)
+
         self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
-        self.addBtn.grid(row=9, columnspan=2)
+        self.addBtn.grid(row=9, column=1, sticky=W)
+
+
+
+        self.updateList()
 
     def pullData(self):
         if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
@@ -141,7 +150,7 @@ class Gui():
             name = self.nameInput.get()
         if not forename:
             forename = self.forenameInput.get()
-        filteredMembers = self.members.getMembersByName(name.strip(), forename.strip()) 
+        filteredMembers = self.members.getMembersByName(name.strip(), forename.strip(), self.showRegistered.get()) 
 
         for member in filteredMembers:
             self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     mitgliedsstatus " + member.membertype + "     geboren " + member.birthday + "    badgecode: " + member.badgecode)
