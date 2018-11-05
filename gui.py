@@ -56,6 +56,7 @@ class Gui():
         self.showRegistered = BooleanVar()
         self.showRegistered.set(False)
         self.checkBtn = Checkbutton(self.g, text="Zeige Registrierte", variable=self.showRegistered)
+        self.checkBtn.bind("<Button-1>", lambda e: self.updateList())
         self.checkBtn.grid(row=9, column=0, sticky=E)
 
         self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
