@@ -8,6 +8,26 @@ from tkinter import simpledialog
 from tkinter import messagebox 
 from threading import Thread
 
+def getUserCreds():
+    try:
+        with open("creds") as f:
+            lines = f.readlines()
+            lines = list(filter(lambda e: e , lines))
+            lines = list(filter(lambda e: not e.startswith("#"), lines))
+            usr = lines[0].split(":")[1].strip()
+            pwd = lines[1].split(":")[1].strip()
+            if usr and pwd:
+                return (usr, pwd)
+    except:
+        pass
+    
+    usr = simpledialog.askstring("Username", "Username")
+    if usr:
+        pwd = simpledialog.askstring("Password", "Password:", show="*")
+        if usr and pwd:
+            return (usr, pwd)
+    return None
+
 
 class Gui():
     def __init__(self):
@@ -82,37 +102,28 @@ class Gui():
             self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     mitgliedsstatus " + member.membertype + "     geboren " + member.birthday + "    badgecode: " + member.badgecode)
 
 
-
     def pullData(self):
         if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
             return
-        usr = simpledialog.askstring("Username", "Username")
-        success = False
-        if usr: 
-            pwd = simpledialog.askstring("Password", "Password:", show="*")
-            if usr and pwd:
-               success = self.members.pullData(usr, pwd)
-        if success:
-            messagebox.showinfo("Success", "Success", parent=self.g)
-            self.updateList()
-        else:
-            messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
+        creds = getUserCreds()
+        if creds:
+            if self.members.pullData(creds[0], creds[1]):
+                messagebox.showinfo("Success", "Success", parent=self.g)
+                self.updateList()
+                return 
+        messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
 
     def pushData(self):
         if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
             return
-        usr = simpledialog.askstring("Username", "Username")
-        success = False
-        if usr: 
-            pwd = simpledialog.askstring("Password", "Password:", show="*")
-            if usr and pwd:
-               success = self.members.pushData(usr, pwd)
-        if success:
-            messagebox.showinfo("Success", "Success", parent=self.g)
-        else:
-            messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
-        
+        creds = getUserCreds()
+        if creds:
+            if self.members.pushData(creds[0], creds[1]):
+                messagebox.showinfo("Success", "Success", parent=self.g)
+                return 
+        messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
 
+        
     def start(self):
         if messagebox.askquestion("Load?", "Die aktuelle Datei vom Server laden?") == 'yes':
             self.pullData()
