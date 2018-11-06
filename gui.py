@@ -17,7 +17,7 @@ class Gui():
         self.g.minsize(width=800,height=600)
         self.title = Label(self.g, pady=20, padx=20, font=("Arial", 24 ), text="FiS - RFID Badge Controller")
         self.title.grid(row=0, columnspan=2)
-        self.resultLabel = Label(self.g, pady=20, font=("Arial", 18), text="Person: ")
+        self.resultLabel = Label(self.g,  pady=20, font=("Arial", 18), text="Person: ")
         self.resultLabel.grid(row=1, columnspan=2)
 
 
@@ -67,6 +67,7 @@ class Gui():
         self.g.grid_columnconfigure(0,weight=1)
         self.g.grid_columnconfigure(1,weight=1)
 
+        self.g.protocol('WM_DELETE_WINDOW', lambda : self.onClose())
 
         self.updateList()
 
@@ -113,16 +114,23 @@ class Gui():
         
 
     def start(self):
+        if messagebox.askquestion("Load?", "Die aktuelle Datei vom Server laden?") == 'yes':
+            self.pullData()
         self.g.mainloop()
+
+    def onClose(self):
+        if messagebox.askquestion("Push?", "Die aktuellen Daten zum Server laden?") == 'yes':
+            self.pushData()
+        self.g.destroy()
 
     def showResult(self, badgecode):
         member = self.members.proofMember(badgecode)
         if not member:
-            self.resultLabel.configure(text=" ACCESS DENIED ")
+            self.resultLabel.configure(text="  ACCESS DENIED  ")
             self.resultLabel.configure(bg="red")
         else:
             lastSeenStr = self.lastSeenString(member.lastseen)
-            self.resultLabel.configure(text=" " + member.name + ", " + member.forename + "  mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr)
+            self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr + "  ")
 
             if "not yet" in lastSeenStr:
                 self.resultLabel.configure(bg="#00ff00")

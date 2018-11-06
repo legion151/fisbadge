@@ -19,7 +19,6 @@ class Members():
                 return memberCpy
         return None
 
-
     def addBadgecode(self, ID, badgecode):
         for m in self.members:
             if m.ID==ID:
@@ -81,8 +80,6 @@ class Members():
         r = requests.post(url, auth=(usr, pwd), data=payload).content.decode()
 
         return 'success' in r
-
-
 
 
 
