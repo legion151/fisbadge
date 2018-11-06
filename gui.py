@@ -33,60 +33,43 @@ class Gui():
     def __init__(self):
         self.members = data.Members("data.csv")
         self.g = Tk()
-#        self.g.title = "Fis Badge"
         self.g.minsize(width=800,height=600)
-        self.title = Label(self.g, pady=20, padx=20, font=("Arial", 24 ), text="FiS - RFID Badge Controller")
-        self.title.grid(row=0, columnspan=2)
-        self.resultLabel = Label(self.g,  pady=20, font=("Arial", 18), text="Person: ")
-        self.resultLabel.grid(row=1, columnspan=2)
+        Label(self.g, pady=20, padx=20, font=("Arial", 24 ), text="FiS - RFID Badge Controller").grid(row=0, columnspan=2)
+
+        self.resultLabel = Label(self.g,  pady=20, font=("Arial", 18), text="Person: ").grid(row=1, columnspan=2)
+
+        Label(self.g, pady=50, font=("Arial", 20), text="Server: ").grid(row=2, columnspan=2)
+
+        Button(self.g, text="Pull data", command=self.pullData).grid(row=3, column=0, sticky=E)
+        Button(self.g, text="Push data", command=self.pushData).grid(row=3, column=1, sticky=W)
 
 
-
-        self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 20), text="Server: ")
-        self.createAreaTitle.grid(row=2, columnspan=2)
-
-        self.pullBtn = Button(self.g, text="Pull data", command=self.pullData)
-        self.pullBtn.grid(row=3, column=0, sticky=E)
-
-        self.pushBtn = Button(self.g, text="Push data", command=self.pushData)
-        self.pushBtn.grid(row=3, column=1, sticky=W)
-
-
-        self.createAreaTitle= Label(self.g, pady=50, font=("Arial", 20), text="Write tag: ")
-        self.createAreaTitle.grid(row=4, columnspan=2)
+        Label(self.g, pady=50, font=("Arial", 20), text="Write tag: ").grid(row=4, columnspan=2)
 
         self.nameStr = StringVar()
         self.nameStr.trace("w", self.updateList)
-        self.createAreaTitle= Label(self.g, pady=0, font=("Arial", 16), text="Filter Name: ")
-        self.createAreaTitle.grid(row=5, column=0, sticky=E)
-        self.nameInput = Entry(self.g,  width=20, textvariable=self.nameStr)
-        self.nameInput.grid(row=5, column=1, sticky=W)
+        Label(self.g, pady=0, font=("Arial", 16), text="Filter Name: ").grid(row=5, column=0, sticky=E)
+        Entry(self.g,  width=20, textvariable=self.nameStr).grid(row=5, column=1, sticky=W)
 
         self.forenameStr = StringVar()
         self.forenameStr.trace("w", self.updateList)
-        self.createAreaTitle= Label(self.g, pady=10, font=("Arial", 16), text="Filter Vorname: ")
-        self.createAreaTitle.grid(row=6, column=0, sticky=E)
-        self.forenameInput = Entry(self.g, width=20, textvariable=self.forenameStr)
-        self.forenameInput.grid(row=6, column=1, sticky=W)
+        Label(self.g, pady=10, font=("Arial", 16), text="Filter Vorname: ").grid(row=6, column=0, sticky=E)
+        Entry(self.g, width=20, textvariable=self.forenameStr).grid(row=6, column=1, sticky=W)
 
         self.dataList = Listbox(self.g, width=80)
         self.dataList.bind("<Button-1>", lambda e : self.addBtn.configure(state="normal"))
-
         self.dataList.grid(row=8, columnspan=2, padx=20)
 
 
         self.showRegistered = BooleanVar()
         self.showRegistered.set(False)
         self.showRegistered.trace("w", self.updateList)
-        self.checkBtn = Checkbutton(self.g, text="Zeige Registrierte", variable=self.showRegistered)
-        self.checkBtn.grid(row=9, column=0, sticky=E)
+        Checkbutton(self.g, text="Zeige Registrierte", variable=self.showRegistered).grid(row=9, column=0, sticky=E)
 
-        self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
-        self.addBtn.grid(row=9, column=1, sticky=W)
+        self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled").grid(row=9, column=1, sticky=W)
 
         self.g.grid_columnconfigure(0,weight=1)
         self.g.grid_columnconfigure(1,weight=1)
-
         self.g.protocol('WM_DELETE_WINDOW', lambda : self.onClose())
 
         self.updateList()
