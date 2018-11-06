@@ -89,7 +89,7 @@ class Gui():
         usr = simpledialog.askstring("Username", "Username")
         success = False
         if usr: 
-            pwd = simpledialog.askstring("Password", "Password:")
+            pwd = simpledialog.askstring("Password", "Password:", show="*")
             if usr and pwd:
                success = self.members.pullData(usr, pwd)
         if success:
@@ -104,7 +104,7 @@ class Gui():
         usr = simpledialog.askstring("Username", "Username")
         success = False
         if usr: 
-            pwd = simpledialog.askstring("Password", "Password:")
+            pwd = simpledialog.askstring("Password", "Password:", show="*")
             if usr and pwd:
                success = self.members.pushData(usr, pwd)
         if success:
