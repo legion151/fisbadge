@@ -36,7 +36,8 @@ class Gui():
         self.g.minsize(width=800,height=600)
         Label(self.g, pady=20, padx=20, font=("Arial", 24 ), text="FiS - RFID Badge Controller").grid(row=0, columnspan=2)
 
-        self.resultLabel = Label(self.g,  pady=20, font=("Arial", 18), text="Person: ").grid(row=1, columnspan=2)
+        self.resultLabel = Label(self.g,  pady=20, font=("Arial", 18), text="Person: ")
+        self.resultLabel.grid(row=1, columnspan=2)
 
         Label(self.g, pady=50, font=("Arial", 20), text="Server: ").grid(row=2, columnspan=2)
 
@@ -66,7 +67,8 @@ class Gui():
         self.showRegistered.trace("w", self.updateList)
         Checkbutton(self.g, text="Zeige Registrierte", variable=self.showRegistered).grid(row=9, column=0, sticky=E)
 
-        self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled").grid(row=9, column=1, sticky=W)
+        self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
+        self.addBtn.grid(row=9, column=1, sticky=W)
 
         self.g.grid_columnconfigure(0,weight=1)
         self.g.grid_columnconfigure(1,weight=1)
