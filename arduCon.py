@@ -33,11 +33,9 @@ class Ardu:
 
     def pingpong(self): 
         try:
-            dbg("write synword")
+            dbg("syn")
             self.ser.flush()
-            sentBytes = 0
-            sentBytes += self.ser.write(b'FIS')
-            dbg(sentBytes)
+            self.ser.write(b'FIS')
             self.ser.flush()
             result = self.ser.read(5)
             self.ser.flush()

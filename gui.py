@@ -164,7 +164,7 @@ class Gui():
             if not member:
                 self.resultLabel.configure(text="  ACCESS DENIED  ")
                 self.resultLabel.configure(bg="red")
-                return False
+                return True 
             else:
                 lastSeenStr = self.lastSeenString(member.lastseen)
                 self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr + "  ")
