@@ -58,7 +58,13 @@ void loop() {
       send_bytes(buffer, 16);
       delay(100);
 
-      //here the writing
+      if(Serial.available()==16){
+         for(int i=0; i<16; i++){
+            buffer[i] = Serial.read();
+         }
+         status = (MFRC522::StatusCode) mfrc522.MIFARE_Write(BLOCK_ADR, buffer, 16);
+         delay(200);
+      }
     }
 
     mfrc522.PICC_HaltA();

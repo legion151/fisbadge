@@ -65,9 +65,9 @@ class Ardu:
         except:
             self.connected = False
         
-   def writeTag(self, s):
+    def writeTag(self, s):
         dbg("i should write tag with: " + str(s))
-        self.send(s.encode("utf-8"))
+        self.send(s)
         
 
 
