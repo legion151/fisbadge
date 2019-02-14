@@ -4,6 +4,12 @@ import datetime
 import random, string, copy
 import requests
 
+def dbg(s, err=""):
+    if(len(err)>0):
+        print(f"dateModul: {s} err: {err}")
+    else:
+        print(f"dateModul: {s}")
+
 class Members():
     def __init__(self, path):
         self.members = []
@@ -11,12 +17,15 @@ class Members():
         self.load()
 
     def proofMember(self,userkey):
+        dbg(f"proofing: {userkey}")
         for member in self.members:
-            if len(userkey)>0 and member.badgecode == userkey:
+            dbg(f"cur mem: {member.badgecode}")
+            if len(userkey)>0 and member.badgecode.encode("utf-8") == userkey:
                 memberCpy = copy.copy(member)
                 member.updateLastSeen()
                 self.persist()
                 return memberCpy
+        dbg(f"returning none")
         return None
 
     def addBadgecode(self, ID, badgecode):

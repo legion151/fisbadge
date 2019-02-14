@@ -7,6 +7,7 @@ from tkinter import *
 from tkinter import simpledialog
 from tkinter import messagebox 
 from threading import Thread
+import arduCon#_stub as arduCon
 
 def getUserCreds():
     try:
@@ -31,6 +32,7 @@ def getUserCreds():
 
 class Gui():
     def __init__(self):
+        self.arduCon = arduCon.Ardu()
         self.members = data.Members("data.csv")
         self.g = Tk()
         self.g.minsize(width=800,height=600)
@@ -70,11 +72,24 @@ class Gui():
         self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
         self.addBtn.grid(row=9, column=1, sticky=W)
 
+        self.connectedLabel = Label(self.g, text="connected", bg="red", pady=5, padx=5)
+        self.connectedLabel.grid(row=9, column=1)
+
         self.g.grid_columnconfigure(0,weight=1)
         self.g.grid_columnconfigure(1,weight=1)
         self.g.protocol('WM_DELETE_WINDOW', lambda : self.onClose())
 
+
         self.updateList()
+        self.showResult()
+        self.guiLoop()
+
+    def showConnected(self, b):
+        if(b):
+            self.connectedLabel.configure(text="connected", bg="#00ff00")
+        else:
+            self.connectedLabel.configure(text="no rfid", bg="red")
+    
 
     def updateList(self, *args):
         self.dataList.delete(0,END)
@@ -107,8 +122,7 @@ class Gui():
                 messagebox.showinfo("Success", "Success", parent=self.g)
                 return 
         messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
-
-        
+       
     def start(self):
         if messagebox.askquestion("Load?", "Die aktuelle Datei vom Server laden?") == 'yes':
             self.pullData()
@@ -119,19 +133,34 @@ class Gui():
             self.pushData()
         self.g.destroy()
 
-    def showResult(self, badgecode):
-        member = self.members.proofMember(badgecode)
-        if not member:
-            self.resultLabel.configure(text="  ACCESS DENIED  ")
-            self.resultLabel.configure(bg="red")
+    def guiLoop(self):
+        if(self.arduCon.connect()):
+            self.showConnected(True)
         else:
-            lastSeenStr = self.lastSeenString(member.lastseen)
-            self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr + "  ")
+            self.showConnected(False)
 
-            if "not yet" in lastSeenStr:
-                self.resultLabel.configure(bg="#00ff00")
+        self.showResult()
+        self.g.after(200, self.guiLoop)
+
+
+    def showResult(self):
+        scanedBadge = self.arduCon.read()
+#        scanedBadge = self.arduCon.getScanResult()
+        if scanedBadge and len(scanedBadge)==16:
+            print(f"scanedBadge: {scanedBadge}")
+            member = self.members.proofMember(scanedBadge)
+            if not member:
+                self.resultLabel.configure(text="  ACCESS DENIED  ")
+                self.resultLabel.configure(bg="red")
             else:
-                self.resultLabel.configure(bg="yellow")
+                lastSeenStr = self.lastSeenString(member.lastseen)
+                self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr + "  ")
+    
+                if "not yet" in lastSeenStr:
+                    self.resultLabel.configure(bg="#00ff00")
+                else:
+                    self.resultLabel.configure(bg="yellow")
+        
 
     def lastSeenString(self, datestring):
         if datestring=="not yet": 
@@ -139,6 +168,7 @@ class Gui():
         d_last = datetime.datetime.strptime(datestring.strip(), "%Y-%m-%d %H:%M:%S")
         d_now = datetime.datetime.now()
         dif = d_now-d_last
+        print(datestring)
 
         if(dif.days>0):
             return str(dif.days) + " days ago"
@@ -153,28 +183,15 @@ class Gui():
         if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
             return
         memberID = self.dataList.get(ACTIVE).split(":")[0]
-        self.members.addBadgecode(memberID, self.members.generateBadgecode())
+        genCode = self.members.generateBadgecode()
+        self.arduCon.writeTag(genCode)
+        self.members.addBadgecode(memberID, genCode)
         self.updateList()
         self.addBtn.configure(state="disabled")
 
 
-def changeStuff():
-    time.sleep(1)
-    global gui
-    gui.showResult("")
-    time.sleep(3)
-    mks = ["" ,"USQvwllXLIIb3UCD", "USQvwllXLIIb3UCD", "sAiTrBk679pnrwK"]
-    for mk in mks:
-        print("proofing: " + mk)
-        gui.showResult(mk)
-        time.sleep(3)
-
-
-
 if __name__ == "__main__":
-    gui = Gui()
+    Gui().start()
 
-    worker = Thread(target=changeStuff)
-    worker.start()
 
-    gui.start()
+
