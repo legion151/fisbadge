@@ -154,6 +154,7 @@ class Gui():
                 self.showConnected(False)
 
         self.badgeWasThere = self.showResult()
+        dbg(f"badgeWasThere: {self.badgeWasThere }")
         self.writeBtnAvailability()
 
         self.g.after(200, self.guiLoop)
@@ -161,6 +162,11 @@ class Gui():
 
     def showResult(self):
         scannedBadge = self.arduCon.readTag()
+
+        dbg(f"scannedbadge: {scannedBadge}")
+        if(scannedBadge):
+            l = len(scannedBadge)
+            dbg(f"len of code: {l}")
         if scannedBadge and len(scannedBadge)==16:
             #don't update gui and file and stuff on every cycle but detect if removed - needs rework 
             if(self.badgeWasThere):

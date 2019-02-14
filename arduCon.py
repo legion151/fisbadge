@@ -10,9 +10,14 @@ def dbg(s, err=""):
 class Ardu:
     def __init__(self):
         self.connected = False
+        self.pingPongCount = 0
 
     def connect(self):
         if(not self.connected):
+            try:
+                self.ser.close()
+            except:
+                pass
             dbg("searching port")
             self.ser = serial.Serial(timeout=1, baudrate=9600)# , xonxoff=0, rtscts=0, dsrdtr=0)
             ports = glob.glob("/dev/ttyUSB*")
@@ -32,6 +37,11 @@ class Ardu:
             return self.pingpong()
 
     def pingpong(self): 
+        self.pingPongCount +=1
+        if(self.pingPongCount%10 == 0):
+            self.connected = False
+            return False
+
         try:
             dbg("syn")
             self.ser.flush()
