@@ -7,6 +7,9 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 MFRC522::MIFARE_Key key;
 
+const byte SECTOR         = 1;
+const byte BLOCK_ADR      = 4;
+const byte TRAILER_BLOCK   = 7;
 
 const byte BUF_SIZE = 18;
 byte buffer[BUF_SIZE];
@@ -41,20 +44,17 @@ void loop() {
     if(!checkCompat(piccType))
         return;
  
-    byte sector         = 1;
-    byte blockAddr      = 4;
-    byte trailerBlock   = 7;
     MFRC522::StatusCode status;
 
     // Authenticate using key A
-    status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
+    status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, TRAILER_BLOCK, &key, &(mfrc522.uid));
     if (status != MFRC522::STATUS_OK) {
         return;
     }
 
     //read buffer
     while(status == MFRC522::STATUS_OK){
-      status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &BUF_SIZE);
+      status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(BLOCK_ADR, buffer, &BUF_SIZE);
       send_bytes(buffer, 16);
       delay(100);
 
