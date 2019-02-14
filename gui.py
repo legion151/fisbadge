@@ -67,7 +67,6 @@ class Gui():
         Entry(self.g, width=20, textvariable=self.forenameStr).grid(row=6, column=1, sticky=W)
 
         self.dataList = Listbox(self.g, width=80)
-        self.dataList.bind("<Button-1>", lambda e : self.addBtn.configure(state="normal"))
         self.dataList.grid(row=8, columnspan=2, padx=20)
 
 
@@ -90,6 +89,12 @@ class Gui():
         self.updateList()
         self.showResult()
         self.guiLoop()
+
+    def writeBtnAvailability(self):
+        if(self.dataList.get(ACTIVE) and self.badgeWasThere):
+            self.addBtn.configure(state="normal")
+        else:
+            self.addBtn.configure(state="disabled")
 
     def showConnected(self, b):
         if(b):
@@ -149,6 +154,7 @@ class Gui():
                 self.showConnected(False)
 
         self.badgeWasThere = self.showResult()
+        self.writeBtnAvailability()
 
         self.g.after(200, self.guiLoop)
 
@@ -202,7 +208,6 @@ class Gui():
         self.arduCon.writeTag(genCode)
         self.members.addBadgecode(memberID, genCode)
         self.updateList()
-        self.addBtn.configure(state="disabled")
 
 
 if __name__ == "__main__":
