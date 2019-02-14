@@ -111,11 +111,11 @@ class Gui():
         filteredMembers = self.members.getMembersByName(name.strip(), forename.strip(), self.showRegistered.get()) 
 
         for member in filteredMembers:
-            self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     mitgliedsstatus " + member.membertype + "     geboren " + member.birthday + "    badgecode: " + member.badgecode)
+            self.dataList.insert(END, member.ID + ": " + member.name + ", " + member.forename + "     memberstate " + member.membertype + "     birth " + member.birthday + "    badgecode: " + member.badgecode)
 
 
     def pullData(self):
-        if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
+        if messagebox.askquestion("Sure?", "Sure?") == 'no':
             return
         creds = getUserCreds()
         if creds:
@@ -126,7 +126,7 @@ class Gui():
         messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
 
     def pushData(self):
-        if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
+        if messagebox.askquestion("Sure?", "Sure?") == 'no':
             return
         creds = getUserCreds()
         if creds:
@@ -173,7 +173,7 @@ class Gui():
                 return True 
             else:
                 lastSeenStr = self.lastSeenString(member.lastseen)
-                self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  memberstate" + member.membertype + "  lastseen: " + lastSeenStr + "  ")
+                self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  memberstate " + member.membertype + "  lastseen: " + lastSeenStr + "  ")
     
                 if "not yet" in lastSeenStr:
                     self.resultLabel.configure(bg="#00ff00")
