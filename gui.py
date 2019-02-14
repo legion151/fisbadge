@@ -58,12 +58,12 @@ class Gui():
 
         self.nameStr = StringVar()
         self.nameStr.trace("w", self.updateList)
-        Label(self.g, pady=0, font=("Arial", 16), text="Filter Name: ").grid(row=5, column=0, sticky=E)
+        Label(self.g, pady=0, font=("Arial", 16), text="Filter surname: ").grid(row=5, column=0, sticky=E)
         Entry(self.g,  width=20, textvariable=self.nameStr).grid(row=5, column=1, sticky=W)
 
         self.forenameStr = StringVar()
         self.forenameStr.trace("w", self.updateList)
-        Label(self.g, pady=10, font=("Arial", 16), text="Filter Vorname: ").grid(row=6, column=0, sticky=E)
+        Label(self.g, pady=10, font=("Arial", 16), text="Filter forename: ").grid(row=6, column=0, sticky=E)
         Entry(self.g, width=20, textvariable=self.forenameStr).grid(row=6, column=1, sticky=W)
 
         self.dataList = Listbox(self.g, width=80)
@@ -73,9 +73,9 @@ class Gui():
         self.showRegistered = BooleanVar()
         self.showRegistered.set(False)
         self.showRegistered.trace("w", self.updateList)
-        Checkbutton(self.g, text="Zeige Registrierte", variable=self.showRegistered).grid(row=9, column=0, sticky=E)
+        Checkbutton(self.g, text="Show registered", variable=self.showRegistered).grid(row=9, column=0, sticky=E)
 
-        self.addBtn = Button(self.g, text="Tag schreiben",  command=self.addBtnAction, state="disabled")
+        self.addBtn = Button(self.g, text="Write to badge",  command=self.addBtnAction, state="disabled")
         self.addBtn.grid(row=9, column=1, sticky=W)
 
         self.connectedLabel = Label(self.g, text="connected", bg="red", pady=5, padx=5)
@@ -136,12 +136,12 @@ class Gui():
         messagebox.showerror("Error", "Sth. went wrong!", parent=self.g)
        
     def start(self):
-        if messagebox.askquestion("Load?", "Die aktuelle Datei vom Server laden?") == 'yes':
+        if messagebox.askquestion("Load?", "Load data from server?") == 'yes':
             self.pullData()
         self.g.mainloop()
 
     def onClose(self):
-        if messagebox.askquestion("Push?", "Die aktuellen Daten zum Server laden?") == 'yes':
+        if messagebox.askquestion("Push?", "Push data to server?") == 'yes':
             self.pushData()
         self.g.destroy()
 
@@ -173,7 +173,7 @@ class Gui():
                 return True 
             else:
                 lastSeenStr = self.lastSeenString(member.lastseen)
-                self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr + "  ")
+                self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  memberstate" + member.membertype + "  lastseen: " + lastSeenStr + "  ")
     
                 if "not yet" in lastSeenStr:
                     self.resultLabel.configure(bg="#00ff00")
@@ -201,7 +201,7 @@ class Gui():
         return str(secs) + " secs"
 
     def addBtnAction(self):
-        if messagebox.askquestion("Sure?", "Wirklich?") == 'no':
+        if messagebox.askquestion("Sure?", "Sure?") == 'no':
             return
         memberID = self.dataList.get(ACTIVE).split(":")[0]
         genCode = self.members.generateBadgecode()
