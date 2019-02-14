@@ -9,6 +9,12 @@ from tkinter import messagebox
 from threading import Thread
 import arduCon#_stub as arduCon
 
+def dbg(s, err=""):
+    if(len(err)>0):
+        print(f"gui: {2} err:{err}")
+    else:
+        print(f"gui: {2}")
+
 def getUserCreds():
     try:
         with open("creds") as f:
@@ -145,9 +151,8 @@ class Gui():
 
     def showResult(self):
         scanedBadge = self.arduCon.read()
-#        scanedBadge = self.arduCon.getScanResult()
         if scanedBadge and len(scanedBadge)==16:
-            print(f"scanedBadge: {scanedBadge}")
+            dbg(f"scanedBadge: {scanedBadge}")
             member = self.members.proofMember(scanedBadge)
             if not member:
                 self.resultLabel.configure(text="  ACCESS DENIED  ")
@@ -168,7 +173,7 @@ class Gui():
         d_last = datetime.datetime.strptime(datestring.strip(), "%Y-%m-%d %H:%M:%S")
         d_now = datetime.datetime.now()
         dif = d_now-d_last
-        print(datestring)
+        dbg(datestring)
 
         if(dif.days>0):
             return str(dif.days) + " days ago"
