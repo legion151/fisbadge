@@ -56,21 +56,18 @@ class Ardu:
             self.ser.write(data.encode('utf-8'))
         except:
             self.connected = False
-    def read(self):
+
+
+
+    def readTag(self):
         try:
             return self.ser.read(16)
         except:
             self.connected = False
         
-
-    def getScanResult(self):
-        results = ["pd36Qwyj7s7NQvZ4", "pd36Qwyj7s7NQvZt", "ILZRLOe4x7nu2MRA", "JHEQOvaOGj55s71W"]
-        if random.randint(1,10) == 1:
-            return random.choice(results)
-        else:
-            return ""
-    def writeTag(self, s):
+   def writeTag(self, s):
         dbg("i should write tag with: " + str(s))
+        self.send(s.encode("utf-8"))
         
 
 

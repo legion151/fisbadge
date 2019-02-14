@@ -160,7 +160,7 @@ class Gui():
 
 
     def showResult(self):
-        scannedBadge = self.arduCon.read()
+        scannedBadge = self.arduCon.readTag()
         if scannedBadge and len(scannedBadge)==16:
             #don't update gui and file and stuff on every cycle but detect if removed - needs rework 
             if(self.badgeWasThere):
