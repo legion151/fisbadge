@@ -53,11 +53,13 @@ void loop() {
     }
 
     //read buffer
-    status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &BUF_SIZE);
-    if (status != MFRC522::STATUS_OK) {
-        return;
+    while(status == MFRC522::STATUS_OK){
+      status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &BUF_SIZE);
+      send_bytes(buffer, 16);
+      delay(100);
+
+      //here the writing
     }
-    send_bytes(buffer, 16);
 
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();

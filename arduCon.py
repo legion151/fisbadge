@@ -1,7 +1,6 @@
 import serial, random, glob, time, sys
 
 def dbg(s, err=""):
-    return
     if(err):
         print(f"arduCon: {s} err: {err}")
     else:

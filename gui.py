@@ -11,9 +11,9 @@ import arduCon#_stub as arduCon
 
 def dbg(s, err=""):
     if(len(err)>0):
-        print(f"gui: {2} err:{err}")
+        print(f"gui: {s} err:{err}")
     else:
-        print(f"gui: {2}")
+        print(f"gui: {s}")
 
 def getUserCreds():
     try:
@@ -39,6 +39,7 @@ def getUserCreds():
 class Gui():
     def __init__(self):
         self.arduCon = arduCon.Ardu()
+        self.badgeWasThere = False
         self.members = data.Members("data.csv")
         self.g = Tk()
         self.g.minsize(width=800,height=600)
@@ -140,23 +141,30 @@ class Gui():
         self.g.destroy()
 
     def guiLoop(self):
-        if(self.arduCon.connect()):
-            self.showConnected(True)
-        else:
-            self.showConnected(False)
+        #pingpong will corrupt states so don't do it
+        if(not self.badgeWasThere):
+            if(self.arduCon.connect()):
+                self.showConnected(True)
+            else:
+                self.showConnected(False)
 
-        self.showResult()
+        self.badgeWasThere = self.showResult()
+
         self.g.after(200, self.guiLoop)
 
 
     def showResult(self):
-        scanedBadge = self.arduCon.read()
-        if scanedBadge and len(scanedBadge)==16:
-            dbg(f"scanedBadge: {scanedBadge}")
-            member = self.members.proofMember(scanedBadge)
+        scannedBadge = self.arduCon.read()
+        if scannedBadge and len(scannedBadge)==16:
+            #don't update gui and file and stuff on every cycle but detect if removed - needs rework 
+            if(self.badgeWasThere):
+                return True
+            dbg(f"scannedBadge: {scannedBadge}")
+            member = self.members.proofMember(scannedBadge)
             if not member:
                 self.resultLabel.configure(text="  ACCESS DENIED  ")
                 self.resultLabel.configure(bg="red")
+                return False
             else:
                 lastSeenStr = self.lastSeenString(member.lastseen)
                 self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  mitgliedsstatus " + member.membertype + "  lastseen: " + lastSeenStr + "  ")
@@ -165,6 +173,8 @@ class Gui():
                     self.resultLabel.configure(bg="#00ff00")
                 else:
                     self.resultLabel.configure(bg="yellow")
+                return True 
+        return False
         
 
     def lastSeenString(self, datestring):
