@@ -55,9 +55,13 @@ void loop() {
     //read buffer
     while(status == MFRC522::STATUS_OK){
       status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(BLOCK_ADR, buffer, &BUF_SIZE);
+      if(status != MFRC522::STATUS_OK)
+        break;
+
       send_bytes(buffer, 16);
       delay(100);
 
+      zeroBuf(buffer, BUF_SIZE);
       if(Serial.available()==16){
          for(int i=0; i<16; i++){
             buffer[i] = Serial.read();
