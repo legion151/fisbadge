@@ -3,6 +3,7 @@
 import data
 import time
 import datetime
+import sound
 from tkinter import *
 from tkinter import simpledialog
 from tkinter import messagebox 
@@ -38,6 +39,7 @@ def getUserCreds():
 
 class Gui():
     def __init__(self):
+        self.sound = sound.Sound()
         self.arduCon = arduCon.Ardu()
         self.badgeWasThere = False
         self.members = data.Members("data.csv")
@@ -176,6 +178,7 @@ class Gui():
             if not member:
                 self.resultLabel.configure(text="  ACCESS DENIED  ")
                 self.resultLabel.configure(bg="red")
+                self.sound.play(False)
                 return scannedBadge
             else:
                 lastSeenStr = self.lastSeenString(member.lastseen)
@@ -185,6 +188,7 @@ class Gui():
                     self.resultLabel.configure(bg="#00ff00")
                 else:
                     self.resultLabel.configure(bg="yellow")
+                self.sound.play(True)
                 return scannedBadge
         return False
         
