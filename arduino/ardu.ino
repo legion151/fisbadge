@@ -59,7 +59,7 @@ void loop() {
         break;
 
       send_bytes(buffer, 16);
-      delay(100);
+      delay(500);
 
       zeroBuf(buffer, BUF_SIZE);
       if(Serial.available()==16){
