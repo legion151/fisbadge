@@ -178,7 +178,7 @@ class Gui():
             if not member:
                 self.resultLabel.configure(text="  ACCESS DENIED  ")
                 self.resultLabel.configure(bg="red")
-                self.sound.play(False)
+                self.sound.bad()
                 return scannedBadge
             else:
                 lastSeenStr = self.lastSeenString(member.lastseen)
@@ -188,7 +188,7 @@ class Gui():
                     self.resultLabel.configure(bg="#00ff00")
                 else:
                     self.resultLabel.configure(bg="yellow")
-                self.sound.play(True)
+                self.sound.good()
                 return scannedBadge
         return False
         
