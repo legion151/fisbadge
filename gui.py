@@ -169,14 +169,14 @@ class Gui():
             dbg(f"len of code: {l}")
         if scannedBadge and len(scannedBadge)==16:
             #don't update gui and file and stuff on every cycle but detect if removed - needs rework 
-            if(self.badgeWasThere):
-                return True
+            if(self.badgeWasThere == scannedBadge):
+                return scannedBadge
             dbg(f"scannedBadge: {scannedBadge}")
             member = self.members.proofMember(scannedBadge)
             if not member:
                 self.resultLabel.configure(text="  ACCESS DENIED  ")
                 self.resultLabel.configure(bg="red")
-                return True 
+                return scannedBadge
             else:
                 lastSeenStr = self.lastSeenString(member.lastseen)
                 self.resultLabel.configure(text="  " + member.name + ", " + member.forename + "  memberstate " + member.membertype + "  lastseen: " + lastSeenStr + "  ")
@@ -185,7 +185,7 @@ class Gui():
                     self.resultLabel.configure(bg="#00ff00")
                 else:
                     self.resultLabel.configure(bg="yellow")
-                return True 
+                return scannedBadge
         return False
         
 
