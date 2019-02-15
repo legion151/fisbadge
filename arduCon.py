@@ -26,7 +26,7 @@ class Ardu:
                 self.ser.port = p
                 try:
                     self.ser.open()
-                    time.sleep(5)
+                    time.sleep(2)
                     self.ser.flush()
                     if(self.pingpong()):
                         return True
