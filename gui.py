@@ -44,28 +44,28 @@ class Gui():
         self.badgeWasThere = False
         self.members = data.Members("data.csv")
         self.g = Tk()
-        self.g.minsize(width=800,height=600)
-        Label(self.g, pady=20, padx=20, font=("Arial", 24 ), text="FiS - RFID Badge Controller").grid(row=0, columnspan=2)
+        self.g.minsize(width=800,height=400)
+        Label(self.g, pady=30, padx=20, font=("Arial", 22 ), text="FiS - RFID Badge Controller").grid(row=0, columnspan=2)
 
-        self.resultLabel = Label(self.g,  pady=20, font=("Arial", 18), text="Person: ")
+        self.resultLabel = Label(self.g,  pady=15, font=("Arial", 16), text="Person: ")
         self.resultLabel.grid(row=1, columnspan=2)
 
-        Label(self.g, pady=50, font=("Arial", 20), text="Server: ").grid(row=2, columnspan=2)
+        Label(self.g, pady=50, font=("Arial", 16), text="Server: ").grid(row=2, columnspan=2)
 
         Button(self.g, text="Pull data", command=self.pullData).grid(row=3, column=0, sticky=E)
         Button(self.g, text="Push data", command=self.pushData).grid(row=3, column=1, sticky=W)
 
 
-        Label(self.g, pady=50, font=("Arial", 20), text="Write tag: ").grid(row=4, columnspan=2)
+        Label(self.g, pady=50, font=("Arial", 16), text="Write tag: ").grid(row=4, columnspan=2)
 
         self.nameStr = StringVar()
         self.nameStr.trace("w", self.updateList)
-        Label(self.g, pady=0, font=("Arial", 16), text="Filter surname: ").grid(row=5, column=0, sticky=E)
+        Label(self.g, pady=0, font=("Arial", 14), text="Filter surname: ").grid(row=5, column=0, sticky=E)
         Entry(self.g,  width=20, textvariable=self.nameStr).grid(row=5, column=1, sticky=W)
 
         self.forenameStr = StringVar()
         self.forenameStr.trace("w", self.updateList)
-        Label(self.g, pady=10, font=("Arial", 16), text="Filter forename: ").grid(row=6, column=0, sticky=E)
+        Label(self.g, pady=10, font=("Arial", 14), text="Filter forename: ").grid(row=6, column=0, sticky=E)
         Entry(self.g, width=20, textvariable=self.forenameStr).grid(row=6, column=1, sticky=W)
 
         self.dataList = Listbox(self.g, width=80)
