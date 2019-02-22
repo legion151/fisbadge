@@ -19,14 +19,14 @@ class Ardu:
             except:
                 pass
             dbg("searching port")
-            self.ser = serial.Serial(timeout=1, baudrate=9600)# , xonxoff=0, rtscts=0, dsrdtr=0)
+            self.ser = serial.Serial(timeout=.1, baudrate=9600)# , xonxoff=0, rtscts=0, dsrdtr=0)
             ports = glob.glob("/dev/ttyUSB*")
             for p in ports:
                 dbg("try port: " + str(p))
                 self.ser.port = p
                 try:
                     self.ser.open()
-                    time.sleep(2)
+                    time.sleep(1.5)
                     self.ser.flush()
                     if(self.pingpong()):
                         return True
@@ -38,7 +38,7 @@ class Ardu:
 
     def pingpong(self): 
         self.pingPongCount +=1
-        if(self.pingPongCount%10 == 0):
+        if(self.pingPongCount%30 == 0):
             self.connected = False
             return False
 

@@ -159,7 +159,7 @@ class Gui():
         dbg(f"badgeWasThere: {self.badgeWasThere }")
         self.writeBtnAvailability()
 
-        self.g.after(200, self.guiLoop)
+        self.g.after(500, self.guiLoop)
 
 
     def showResult(self):
