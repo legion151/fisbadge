@@ -44,6 +44,8 @@ class Gui():
         self.badgeWasThere = False
         self.members = data.Members("data.csv")
         self.g = Tk()
+        self.g.iconbitmap("./logo_fis.ico")
+        self.g.title("FiS - RFID Badge Controller")
         self.g.minsize(width=800,height=400)
         Label(self.g, pady=20, padx=20, font=("Arial", 22 ), text="FiS - RFID Badge Controller").grid(row=0, columnspan=2)
 
