@@ -67,28 +67,34 @@ class Members():
             pass
 
     def pullData(self, usr, pwd):
-        url = "https://www.fis-ev.de/intern/db/getFisBadgeFile.php"
-        data = requests.get(url, auth=(usr, pwd)).content.decode()
+        try:
+            url = "https://www.fis-ev.de/intern/db/getFisBadgeFile.php"
+            data = requests.get(url, auth=(usr, pwd), timeout=5).content.decode()
 
-        if 'id,name,forename' in data:
-            open(self.path, "w").write(data)
-            self.load()
-            return True
+            if 'id,name,forename' in data:
+                open(self.path, "w").write(data)
+                self.load()
+                return True
 
-        else:
+            else:
+                return False
+        except:
             return False
 
     def pushData(self, usr, pwd):
-        url = "https://www.fis-ev.de/intern/db/setFisBadgeData.php"
-        postdata = ""
-        for member in self.members:
-            if member.badgecode:
-                postdata += member.ID +","+ member.badgecode + ";"
-
-        payload = {"data":postdata}
-        r = requests.post(url, auth=(usr, pwd), data=payload).content.decode()
-
-        return 'success' in r
+        try:
+            url = "https://www.fis-ev.de/intern/db/setFisBadgeData.php"
+            postdata = ""
+            for member in self.members:
+                if member.badgecode:
+                    postdata += member.ID +","+ member.badgecode + ";"
+    
+            payload = {"data":postdata}
+            r = requests.post(url, auth=(usr, pwd), data=payload, timeout=5).content.decode()
+    
+            return 'success' in r
+        except:
+            return False
 
 
 
