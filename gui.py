@@ -46,31 +46,33 @@ class Gui():
         self.g = Tk()
         self.g.title("FiS - RFID Badge Controller")
         self.g.minsize(width=800,height=400)
-        Label(self.g, pady=20, padx=20, font=("Arial", 22 ), text="FiS - RFID Badge Controller").grid(row=0, columnspan=2)
+        cols=4
+        self.count=0
+        Label(self.g, pady=20, padx=20, font=("Arial", 22 ), text="FiS - RFID Badge Controller").grid(row=0, columnspan=cols)
 
         self.resultLabel = Label(self.g,  pady=15, font=("Arial", 16), text="Person: ")
-        self.resultLabel.grid(row=1, columnspan=2)
+        self.resultLabel.grid(row=1, columnspan=cols)
 
-        Label(self.g, pady=30, font=("Arial", 16), text="Server: ").grid(row=2, columnspan=2)
+        Label(self.g, pady=30, font=("Arial", 16), text="Server: ").grid(row=2, columnspan=cols)
 
-        Button(self.g, text="Pull data", command=self.pullData).grid(row=3, column=0, sticky=E)
-        Button(self.g, text="Push data", command=self.pushData).grid(row=3, column=1, sticky=W)
+        Button(self.g, text="Pull data", command=self.pullData).grid(row=3, column=1, sticky=E)
+        Button(self.g, text="Push data", command=self.pushData).grid(row=3, column=2, sticky=W)
 
 
-        Label(self.g, pady=30, font=("Arial", 16), text="Write tag: ").grid(row=4, columnspan=2)
+        Label(self.g, pady=30, font=("Arial", 16), text="Write tag: ").grid(row=4, columnspan=cols)
 
         self.nameStr = StringVar()
         self.nameStr.trace("w", self.updateList)
-        Label(self.g, pady=0, font=("Arial", 14), text="Filter surname: ").grid(row=5, column=0, sticky=E)
-        Entry(self.g,  width=20, textvariable=self.nameStr).grid(row=5, column=1, sticky=W)
+        Label(self.g, pady=0, font=("Arial", 14), text="Filter surname: ").grid(row=5, column=1, sticky=E)
+        Entry(self.g,  width=20, textvariable=self.nameStr).grid(row=5, column=2, sticky=W)
 
         self.forenameStr = StringVar()
         self.forenameStr.trace("w", self.updateList)
-        Label(self.g, pady=10, font=("Arial", 14), text="Filter forename: ").grid(row=6, column=0, sticky=E)
-        Entry(self.g, width=20, textvariable=self.forenameStr).grid(row=6, column=1, sticky=W)
+        Label(self.g, pady=10, font=("Arial", 14), text="Filter forename: ").grid(row=6, column=1, sticky=E)
+        Entry(self.g, width=20, textvariable=self.forenameStr).grid(row=6, column=2, sticky=W)
 
         self.dataList = Listbox(self.g, width=80)
-        self.dataList.grid(row=8, columnspan=2, padx=20)
+        self.dataList.grid(row=8, columnspan=cols, padx=20)
 
 
         self.showRegistered = BooleanVar()
@@ -81,11 +83,17 @@ class Gui():
         self.addBtn = Button(self.g, text="Write to badge",  command=self.addBtnAction, state="disabled")
         self.addBtn.grid(row=9, column=1, sticky=W)
 
-        self.connectedLabel = Label(self.g, text="connected", bg="red", pady=5, padx=5)
-        self.connectedLabel.grid(row=9, column=1)
+        self.countlabel = Label(self.g, text="count: "+str(self.count), pady=5, padx=5)
+        self.countlabel.grid(row=9, column=2)
 
-        self.g.grid_columnconfigure(0,weight=1)
-        self.g.grid_columnconfigure(1,weight=1)
+        self.connectedLabel = Label(self.g, text="connected", bg="red", pady=5, padx=5)
+        self.connectedLabel.grid(row=9, column=3)
+
+        for i in range(cols):
+            self.g.grid_columnconfigure(i,weight=1)
+            self.g.grid_columnconfigure(i,weight=1)
+            self.g.grid_columnconfigure(i,weight=1)
+            self.g.grid_columnconfigure(i,weight=1)
         self.g.protocol('WM_DELETE_WINDOW', lambda : self.onClose())
 
 
@@ -105,6 +113,10 @@ class Gui():
         else:
             self.connectedLabel.configure(text="no rfid", bg="red")
     
+    def incCount(self):
+        self.count += 1
+        self.countlabel.configure(text="count: " +str(self.count))
+
 
     def updateList(self, *args):
         self.dataList.delete(0,END)
@@ -187,6 +199,7 @@ class Gui():
     
                 if "not yet" in lastSeenStr:
                     self.resultLabel.configure(bg="#00ff00")
+                    self.incCount()
                 else:
                     self.resultLabel.configure(bg="yellow")
                 self.sound.good()
